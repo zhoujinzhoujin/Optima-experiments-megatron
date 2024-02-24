@@ -116,7 +116,7 @@ class MixedFusedLayerNorm(torch.nn.Module):
           input, self.weight, self.bias, self.normalized_shape, self.eps)
     else:
         output = FastLayerNormFN.apply(
-          input, self.weight, self.bias, self.eps)
+          input, self.weight, self.bias, self.eps, False)
 
         # Apex's fast layer norm function outputs a 'view' tensor (i.e., has
         # a populated '_base' field). This will result in schedule.py's
