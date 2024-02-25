@@ -187,6 +187,8 @@ def _initialize_distributed():
         if mpu.model_parallel_is_initialized():
             print('model parallel is already initialized')
         else:
+            from megatron import print_rank_0
+            print_rank_0("HERE0")
             mpu.initialize_model_parallel(args.tensor_model_parallel_size,
                                           args.pipeline_model_parallel_size,
                                           args.virtual_pipeline_model_parallel_size,

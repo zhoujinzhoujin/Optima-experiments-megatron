@@ -19,6 +19,7 @@ from .distributed import DistributedDataParallel
 from .bert_model import BertModel
 from .gpt_model import GPTModel
 from .t5_model import T5Model
+from .llama2_model import Llama2Model
 from .language_model import get_language_model
 from .module import Float16Module
 from .enums import ModelType

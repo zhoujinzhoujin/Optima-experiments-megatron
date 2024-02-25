@@ -826,8 +826,14 @@ def _add_data_args(parser):
                        default=None,
                        choices=['BertWordPieceLowerCase',
                                 'BertWordPieceCase',
-                                'GPT2BPETokenizer'],
+                                'GPT2BPETokenizer',
+                                'Llama2Tokenizer', 
+                                'PretrainedFromHF'],
                        help='What type of tokenizer to use.')
+    group.add_argument("--tokenizer-name-or-path", type=str, default=None,
+                        help="Name or path of the huggingface tokenizer.")
+    group.add_argument("--tokenizer-not-use-fast", action='store_false',
+                       help="HuggingFace tokenizer not use the fast version.")
     group.add_argument('--data-impl', type=str, default='infer',
                        choices=['lazy', 'cached', 'mmap', 'infer'],
                        help='Implementation of indexed datasets.')
