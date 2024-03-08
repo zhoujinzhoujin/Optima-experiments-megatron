@@ -26,9 +26,9 @@ import torch.nn.functional as F
 
 from megatron import get_args
 from megatron import mpu
-from megatron.mpu import initialize
+from megatron.mpu import initialize, vocab_parallel_cross_entropy
 # from megatron.mpu import utils
-from megatron.core import tensor_parallel, utils
+from megatron.core import utils
 from megatron.model.module import MegatronModule
 from megatron.model.enums import AttnMaskType, AttnType
 from megatron.model.utils import init_method_normal, scaled_init_method_normal, attention_mask_func
@@ -512,7 +512,6 @@ class Llama2ParallelTransformer(MegatronModule):
             # layers to stages like (each list is a model chunk):
             # Stage 0: [0, 1]  [4, 5]
             # Stage 1: [2, 3]  [6, 7]
-            initialize
             offset = initialize.get_virtual_pipeline_model_parallel_rank() * (
                     args.num_layers // args.virtual_pipeline_model_parallel_size) + \
                     (initialize.get_pipeline_model_parallel_rank() * self.num_layers)
@@ -635,7 +634,7 @@ def CrossEntropy(output, labels):
     labels, loss_mask = labels[0], labels[1]
 
     args = get_args()
-    losses = tensor_parallel.vocab_parallel_cross_entropy(output.contiguous().float(), labels)
+    losses = vocab_parallel_cross_entropy(output.contiguous().float(), labels)
     loss_mask = loss_mask.view(-1)
     loss = torch.sum(losses.view(-1) * loss_mask) / loss_mask.sum()
     return loss
@@ -715,9 +714,9 @@ class Llama2Model(MegatronModule):
             else:
                 if self.fp16_lm_cross_entropy:
                     assert hidden_states.dtype == torch.half
-                    loss = tensor_parallel.vocab_parallel_cross_entropy(hidden_states, labels)
+                    loss = vocab_parallel_cross_entropy(hidden_states, labels)
                 else:
-                    loss = tensor_parallel.vocab_parallel_cross_entropy(hidden_states.float(), labels)
+                    loss = vocab_parallel_cross_entropy(hidden_states.float(), labels)
                 return loss
 
         return hidden_states

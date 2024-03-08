@@ -29,6 +29,28 @@ from megatron.utils import get_ltor_masks_and_position_ids
 from megatron.utils import average_losses_across_data_parallel_group
 
 
+def get_model_size(model: torch.nn.Module):
+    total_size = 0
+    for module in model.modules():
+        for p in module.parameters(recurse=False):
+            total_size += p.numel() * p.element_size()
+    return total_size
+
+
+def model_size_formatter(numel: int) -> str:
+    GB_SIZE = 10**9
+    MB_SIZE = 10**6
+    KB_SIZE = 10**3
+    if numel >= GB_SIZE:
+        return f'{numel / GB_SIZE:.1f}B'
+    elif numel >= MB_SIZE:
+        return f'{numel / MB_SIZE:.1f}M'
+    elif numel >= KB_SIZE:
+        return f'{numel / KB_SIZE:.1f}K'
+    else:
+        return str(numel)
+
+
 def model_provider(pre_process=True, post_process=True):
     """Build the model."""
 
@@ -39,6 +61,8 @@ def model_provider(pre_process=True, post_process=True):
         pre_process=pre_process,
         post_process=post_process
     )
+    model_size = get_model_size(model)
+    print_rank_0(f'model size = {model_size_formatter(model_size)}')
     return model
 
 
