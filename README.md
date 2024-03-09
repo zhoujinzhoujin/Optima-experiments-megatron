@@ -1,3 +1,23 @@
+# Steps to run megatron experiments
+
+mv Megatron_dataset /home/jinzhou/Megatron_dataset
+
+sudo docker pull nvcr.io/nvidia/pytorch:24.01-py3
+
+sudo docker run --gpus all -it --rm --shm-size=2g -v /home/jinzhou/Optima-experiments-megatron:/workspace/megatron -v /home/jinzhou/Megatron_dataset:/workspace/dataset  nvcr.io/nvidia/pytorch:24.01-py3
+
+pip install nltk transformers sentencepiece
+
+huggingface-cli login --token <token>
+
+cd /workspace/megatron
+
+./examples/pretrain_gpt_distributed.sh
+
+./examples/pretrain_llama2_distributed.sh
+
+# Original README
+
 Megatron ([1](https://arxiv.org/pdf/1909.08053.pdf), [2](https://arxiv.org/pdf/2104.04473.pdf), and [3](https://arxiv.org/pdf/2205.05198)) is a large, powerful transformer developed by the Applied Deep Learning Research team at NVIDIA. This repository is for ongoing research on training large transformer language models at scale. We developed efficient, model-parallel ([tensor](https://arxiv.org/pdf/1909.08053.pdf), [sequence](https://arxiv.org/pdf/2205.05198), and [pipeline](https://arxiv.org/pdf/2104.04473.pdf)), and multi-node pre-training of transformer based models such as [GPT](https://arxiv.org/abs/2005.14165), [BERT](https://arxiv.org/pdf/1810.04805.pdf), and [T5](https://arxiv.org/abs/1910.10683) using mixed precision.
 
 Below are some of the projects where we have directly used Megatron:
