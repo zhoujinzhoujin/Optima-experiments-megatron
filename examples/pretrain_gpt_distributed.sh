@@ -10,7 +10,7 @@ NNODES=1
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
-DATA_PATH=/workspace/dataset/gpt2-345m/my-gpt2_text_document
+DATA_PATH=/home/ubuntu/Megatron_dataset/gpt2-345m/my-gpt2_text_document
 # CHECKPOINT_PATH=/workspace/checkpoints/gpt2-345m/
 
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE --nnodes $NNODES --node_rank $NODE_RANK --master_addr $MASTER_ADDR --master_port $MASTER_PORT"
@@ -41,6 +41,6 @@ torchrun $DISTRIBUTED_ARGS pretrain_gpt.py \
        --clip-grad 1.0e12 \
        --eval-iters 0 \
        --log-interval 1 \
-       --vocab-file /workspace/dataset/gpt2-345m/gpt2-vocab.json \
-       --merge-file /workspace/dataset/gpt2-345m/gpt2-merges.txt
+       --vocab-file /home/ubuntu/Megatron_dataset/gpt2-345m/gpt2-vocab.json \
+       --merge-file /home/ubuntu/Megatron_dataset/gpt2-345m/gpt2-merges.txt
 #       --load $CHECKPOINT_PATH \

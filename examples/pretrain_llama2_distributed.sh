@@ -10,7 +10,7 @@ NNODES=1
 NODE_RANK=0
 WORLD_SIZE=$(($GPUS_PER_NODE*$NNODES))
 
-DATA_PATH=/workspace/dataset/llama2-7b/my-llama2_text_document
+DATA_PATH=/home/ubuntu/Megatron_dataset/llama2-7b/my-llama2_text_document
 
 DISTRIBUTED_ARGS="--nproc_per_node $GPUS_PER_NODE --nnodes $NNODES --node_rank $NODE_RANK --master_addr $MASTER_ADDR --master_port $MASTER_PORT"
 # 32
@@ -38,8 +38,8 @@ torchrun $DISTRIBUTED_ARGS pretrain_llama2.py \
        --clip-grad 1.0e12 \
        --eval-iters 0 \
        --log-interval 1 \
-       --vocab-file /workspace/dataset/llama2-7b/gpt2-vocab.json \
-       --merge-file /workspace/dataset/llama2-7b/gpt2-merges.txt \
+       --vocab-file /home/ubuntu/Megatron_dataset/llama2-7b/gpt2-vocab.json \
+       --merge-file /home/ubuntu/Megatron_dataset/llama2-7b/gpt2-merges.txt \
        --tokenizer-name-or-path meta-llama/Llama-2-7b-hf \
        --tokenizer-not-use-fast
 #       --load $CHECKPOINT_PATH \
